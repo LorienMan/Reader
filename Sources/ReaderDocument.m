@@ -60,6 +60,7 @@
 @synthesize bookmarks = _bookmarks;
 @synthesize lastOpen = _lastOpen;
 @synthesize password = _password;
+@synthesize title = _title;
 @dynamic fileName, fileURL;
 
 #pragma mark ReaderDocument class methods
@@ -153,7 +154,7 @@
 	return document;
 }
 
-+ (ReaderDocument *)withDocumentFilePath:(NSString *)filePath password:(NSString *)phrase
++ (ReaderDocument *)withDocumentFilePath:(NSString *)filePath password:(NSString *)phrase title:(NSString *)title
 {
 	ReaderDocument *document = nil; // ReaderDocument object
 
@@ -161,7 +162,7 @@
 
 	if (document == nil) // Unarchive failed so we create a new ReaderDocument object
 	{
-		document = [[ReaderDocument alloc] initWithFilePath:filePath password:phrase];
+		document = [[ReaderDocument alloc] initWithFilePath:filePath password:phrase title:title];
 	}
 
 	return document;
@@ -194,7 +195,7 @@
 
 #pragma mark ReaderDocument instance methods
 
-- (id)initWithFilePath:(NSString *)fullFilePath password:(NSString *)phrase
+- (id)initWithFilePath:(NSString *)fullFilePath password:(NSString *)phrase title:(NSString *)title
 {
 	id object = nil; // ReaderDocument object
 
@@ -240,6 +241,8 @@
 			_fileSize = [fileAttributes objectForKey:NSFileSize]; // File size (bytes)
 
 			[self saveReaderDocument]; // Save the ReaderDocument object
+
+            _title = title ? title : [[_fileName lastPathComponent] stringByDeletingPathExtension]; // Save document title
 
 			object = self; // Return initialized ReaderDocument object
 		}
@@ -322,6 +325,8 @@
 	[encoder encodeObject:_fileSize forKey:@"FileSize"];
 
 	[encoder encodeObject:_lastOpen forKey:@"LastOpen"];
+
+    [encoder encodeObject:_title forKey:@"Title"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -343,6 +348,8 @@
 		_fileSize = [decoder decodeObjectForKey:@"FileSize"];
 
 		_lastOpen = [decoder decodeObjectForKey:@"LastOpen"];
+
+        _title = [decoder decodeObjectForKey:@"Title"];
 
 		if (_guid == nil) _guid = [ReaderDocument GUID];
 
