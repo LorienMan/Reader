@@ -41,7 +41,7 @@
 
 + (ReaderDocument *)withDocumentFilePath:(NSString *)filename password:(NSString *)phrase title:(NSString *)title;
 
-+ (ReaderDocument *)unarchiveFromFileName:(NSString *)filename password:(NSString *)phrase title:(NSString *)title;
++ (ReaderDocument *)unarchiveFromFileName:(NSString *)filename password:(NSString *)phrase;
 
 - (id)initWithFilePath:(NSString *)fullFilePath password:(NSString *)phrase title:(NSString *)title;
 
